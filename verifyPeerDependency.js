@@ -1,32 +1,30 @@
 const package = require('./package.json');
 
-/**
- * Verifies that dependencies specified in optionalPeerDependencies are actually installed.
- * Rather than running at install time, this is meant to happen at runtime.
- * Throws an Error if dependency is not found
- * @param {string|array} dependency - name or list of names of dependencies to verify
- */
-module.exports = function verifyPeerDependency(dependency, cb) {
-
-	if (Array.isArray(dependency)) {
-		return dependency.forEach(function(d) {
-			verifyPeerDependency(d, cb);
-		});
+function error(err, shouldThrow) {
+	if (shouldThrow) {
+		throw new Error(err);
+	} else {
+		console.error(err);
+		process.exit(1);
 	}
+}
 
-
+/**
+ * Verifies that a dependency specified in optionalPeerDependencies is actually installed.
+ * Rather than running at install time, this is meant to happen at runtime.
+ * @param {string} dependency - name of dependency to verify
+ * @param {boolean} shouldThrow - if true, the function will throw rather than exiting the process
+ */
+module.exports = function verifyPeerDependency(dependency, shouldThrow) {
 	var version = package.optionalPeerDependencies[dependency];
-	console.log(dependency, version, !version);
 	if (!version) {
-		throw new Error(package.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.');
+		return error(package.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.', shouldThrow);
 	}
 	var dependencyPath;
 	try {
 		dependencyPath = require.resolve(dependency);
 	} catch (e) {
-		console.error(e);
-		throw new Error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.');
+		return error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
 	}
 	// check version
-	console.log(dependencyPath);
 }

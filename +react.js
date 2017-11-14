@@ -1,6 +1,7 @@
-var verifyPeers = require('./verifyPeerDependency');
+var verifyPeer = require('./verifyPeerDependency');
 
-verifyPeers([ 'eslint-plugin-react', 'eslint-plugin-jsx-a11y' ]);
+verifyPeer('eslint-plugin-react');
+verifyPeer('eslint-plugin-jsx-a11y');
 
 module.exports = {
 	plugins: [
