@@ -28,5 +28,6 @@ module.exports = function verifyPeerDependency(dependency, shouldThrow) {
 		return error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
 	}
 	console.log(dependencyPath);
+
 	// check version
 }
