@@ -1,3 +1,9 @@
+var codependency = require('codependency');
+var requirePeer = codependency.register(module);
+
+var jsxa11y = requirePeer('eslint-config-jsx-a11y');
+var react = requirePeer('eslint-config-react');
+
 module.exports = {
 	plugins: [
 		'jsx-a11y',
