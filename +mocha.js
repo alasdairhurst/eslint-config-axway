@@ -1,6 +1,6 @@
 var verifyPeer = require('./verifyPeerDependency');
 
-verifyPeer('eslint-config-mocha');
+verifyPeer('eslint-plugin-mocha');
 
 module.exports = {
 	'globals': {
