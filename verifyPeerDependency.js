@@ -1,4 +1,4 @@
-var package = require('./package.json');
+var packageJSON = require('./package.json');
 var semver = require('semver');
 var path = require('path');
 var findRoot = require('find-root');
@@ -17,29 +17,32 @@ function error(err, shouldThrow) {
  * Rather than running at install time, this is meant to happen at runtime.
  * @param {string} dependency - name of dependency to verify
  * @param {boolean} shouldThrow - if true, the function will throw rather than exiting the process
+ * @returns {void}
  */
 module.exports = function verifyPeerDependency(dependency, shouldThrow) {
-	console.info('verify', dependency);
-	var version = package.optionalPeerDependencies[dependency];
+	var version = packageJSON.optionalPeerDependencies[dependency];
 	if (!version) {
-		return error(package.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.', shouldThrow);
+		return error(packageJSON.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.', shouldThrow);
 	}
+	// Try to verify that the dependency is installed.
 	var dependencyPath;
 	try {
 		dependencyPath = require.resolve(dependency);
 	} catch (e) {
-		return error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
+		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
 	}
-	console.log(dependencyPath);
-	// find the closest package.json
+	// Find the closest package.json so that we can get the installed version of the dependency
 	var root = findRoot(dependencyPath);
 
 	if (root === dependencyPath) {
+		// For whatever reason we couldn't find the package.json of the dependency
 		return error('Cannot verify that ' + dependency + '@' + version + ' satisfies specified version', shouldThrow);
 	}
+	// eslint-disable-next-line security/detect-non-literal-require
 	var dependencyPackage = require(path.join(root, 'package.json'));
+
+	// Check version matches the required one
 	if (!semver.valid(dependencyPackage.version)) {
-		return error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
+		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
 	}
-	// check version
-}
+};

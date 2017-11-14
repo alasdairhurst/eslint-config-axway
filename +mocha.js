@@ -1,5 +1,5 @@
+/* eslint-disable quote-props */
 var verifyPeer = require('./verifyPeerDependency');
-
 verifyPeer('eslint-plugin-mocha');
 
 module.exports = {

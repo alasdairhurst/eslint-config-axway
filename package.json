@@ -34,6 +34,7 @@
   "dependencies": {
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-security": "^1.4.0",
+    "find-root": "^1.1.0",
     "semver": "^5.4.1"
   },
   "optionalPeerDependencies": {
@@ -44,5 +45,11 @@
   },
   "peerDependencies": {
     "eslint": "4.x"
+  },
+  "devDependencies": {
+    "eslint": "4.x"
+  },
+  "scripts": {
+    "lint": "eslint ."
   }
 }
