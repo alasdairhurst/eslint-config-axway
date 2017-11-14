@@ -1,8 +1,7 @@
 'use strict';
-var codependency = require('codependency');
-var requirePeer = codependency.register(module);
+var verifyPeer = require('./verifyPeerDependency');
 
-var babel = requirePeer('babel-eslint');
+verifyPeer('babel-eslint');
 
 module.exports = {
 	'parser': 'babel-eslint',

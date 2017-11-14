@@ -1,7 +1,6 @@
-var codependency = require('codependency');
-var requirePeer = codependency.register(module);
+var verifyPeer = require('./verifyPeerDependency');
 
-var mocha = requirePeer('eslint-config-mocha');
+verifyPeer('eslint-config-mocha');
 
 module.exports = {
 	'globals': {
