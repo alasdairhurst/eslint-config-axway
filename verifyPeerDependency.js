@@ -20,8 +20,8 @@ function error(err, shouldThrow) {
  * @returns {void}
  */
 module.exports = function verifyPeerDependency(dependency, shouldThrow) {
-	var version = packageJSON.optionalPeerDependencies[dependency];
-	if (!version) {
+	var range = packageJSON.optionalPeerDependencies[dependency];
+	if (!range) {
 		return error(packageJSON.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.', shouldThrow);
 	}
 	// Try to verify that the dependency is installed.
@@ -29,20 +29,20 @@ module.exports = function verifyPeerDependency(dependency, shouldThrow) {
 	try {
 		dependencyPath = require.resolve(dependency);
 	} catch (e) {
-		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
+		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + range + ' but none was installed.', shouldThrow);
 	}
 	// Find the closest package.json so that we can get the installed version of the dependency
 	var root = findRoot(dependencyPath);
 
 	if (root === dependencyPath) {
 		// For whatever reason we couldn't find the package.json of the dependency
-		return error('Cannot verify that ' + dependency + '@' + version + ' satisfies specified version', shouldThrow);
+		return error('Cannot verify that ' + dependency + '@' + range + ' satisfies specified version', shouldThrow);
 	}
 	// eslint-disable-next-line security/detect-non-literal-require
 	var dependencyPackage = require(path.join(root, 'package.json'));
 
-	// Check version matches the required one
-	if (!semver.valid(dependencyPackage.version)) {
-		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
+	// Check dependency version satisfies the required range
+	if (!semver.satisfies(dependencyPackage.version, range)) {
+		return error(packageJSON.name + ' requires a dependency of ' + dependency + '@' + range + ' but none was installed.', shouldThrow);
 	}
 };
