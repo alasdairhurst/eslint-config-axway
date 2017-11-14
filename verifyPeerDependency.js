@@ -1,4 +1,5 @@
-const package = require('./package.json');
+var package = require('./package.json');
+var semver = require('semver');
 
 function error(err, shouldThrow) {
 	if (shouldThrow) {
@@ -26,5 +27,6 @@ module.exports = function verifyPeerDependency(dependency, shouldThrow) {
 	} catch (e) {
 		return error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.', shouldThrow);
 	}
+	console.log(dependencyPath);
 	// check version
 }
