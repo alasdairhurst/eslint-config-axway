@@ -14,25 +14,18 @@ module.exports = function verifyPeerDependency(dependency, cb) {
 		});
 	}
 
+
 	var version = package.optionalPeerDependencies[dependency];
+	console.log(dependency, version, !version);
 	if (!version) {
-		var err = new Error(package.name + 'does not specify ' + dependency + ' as an optionalPeerDependency.');
-		if (cb) {
-			return cb(err);
-		} else {
-			throw err;
-		}
+		throw new Error(package.name + ' does not specify ' + dependency + ' as an optionalPeerDependency.');
 	}
 	var dependencyPath;
 	try {
 		dependencyPath = require.resolve(dependency);
 	} catch (e) {
-		var err = new Error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.');
-		if (cb) {
-			return cb(err);
-		} else {
-			throw err;
-		}
+		console.error(e);
+		throw new Error(package.name + ' requires a dependency of ' + dependency + '@' + version + ' but none was installed.');
 	}
 	// check version
 	console.log(dependencyPath);
