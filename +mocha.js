@@ -1,4 +1,9 @@
 /* eslint-disable quote-props */
+var codependency = require('codependency');
+var requirePeer = codependency.register(module);
+
+requirePeer('eslint-plugin-mocha');
+
 var verifyPeer = require('./verifyPeerDependency');
 verifyPeer('eslint-plugin-mocha');
 

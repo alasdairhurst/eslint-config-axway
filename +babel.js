@@ -1,5 +1,10 @@
 'use strict';
 /* eslint-disable quote-props */
+var codependency = require('codependency');
+var requirePeer = codependency.register(module);
+
+requirePeer('babel-eslint');
+
 var verifyPeer = require('./verifyPeerDependency');
 verifyPeer('babel-eslint');
 
